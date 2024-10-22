@@ -1,7 +1,8 @@
 {% extends 'recipes/base.html' %}
 {% block content %}
     <h2>Categories List</h2>
-    <a href="{% url 'recipes:category_create' %}">Create New Category</a>
+    <a href="{% url 'recipes:category_create' %}">Create New Category</a> ||||||||
+    <a href="{% url 'recipes:main_menu' %}">Go back to Main Menu</a>
     {% if categories %}
         {% for category in categories %}
             <div style="border: 2px solid gray; margin: 5px">
