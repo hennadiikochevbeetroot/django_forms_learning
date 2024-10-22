@@ -9,7 +9,7 @@
                 <p>Name: {{ category.name }}</p>
                 <p>Description: {{ category.description }}</p>
                 <a href="{% url 'recipes:category_edit' category.pk %}">Update</a>
-                <a href="#">Delete</a>
+                <a href="{% url 'recipes:category_delete' category.pk %}">Delete</a>
             </div>
         {% endfor %}
     {% else %}

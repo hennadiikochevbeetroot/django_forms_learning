@@ -1,0 +1,10 @@
+{% extends 'recipes/base.html' %}
+{% block content %}
+    <p>Do you really want to delete category "{{ category.name }}"?</p>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit">Submit</button>
+        <a href="{% url 'recipes:category_list' %}">Cancel</a>
+    </form>
+{% endblock %}
+

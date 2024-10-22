@@ -49,3 +49,11 @@ def category_edit(request: HttpRequest, pk: int) -> HttpResponse:
         form = CategoryForm(instance=category)
 
     return render(request, 'recipes/category_form.html', {'form': form})
+
+
+def category_delete(request: HttpRequest, pk: int) -> HttpResponse:
+    category = get_object_or_404(Category, pk=pk)
+    if request.method == 'POST':
+        category.delete()
+        return redirect('recipes:category_list')
+    return render(request, 'recipes/category_confirm_delete.html', {'category': category})
