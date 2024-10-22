@@ -5,6 +5,11 @@ from .forms import CategoryForm, IngredientForm
 from .models import Category, Ingredient
 
 
+######################### MAIN MENU
+def main_menu(request: HttpRequest) -> HttpResponse:
+    return render(request, 'recipes/main_menu.html')
+
+
 ######################### CATEGORIES
 
 # CREATE

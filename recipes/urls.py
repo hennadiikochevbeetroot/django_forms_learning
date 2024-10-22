@@ -4,6 +4,8 @@ from . import views
 
 app_name = 'recipes'
 urlpatterns = [
+    # Main Menu
+    path('main_menu/', views.main_menu, name='main_menu'),
     # Categories CRUD
     path('categories/', views.category_list, name='category_list'),
     path('categories/create/', views.category_create, name='category_create'),

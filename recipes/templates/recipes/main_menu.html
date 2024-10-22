@@ -1,0 +1,12 @@
+{% extends 'recipes/base.html' %}
+{% block content %}
+    <h2>Main Menu of Cooking App</h2>
+    <ul>
+        <li>
+            <p>Go to: <a href="{% url 'recipes:category_list' %}">Categories List</a></p>
+        </li>
+        <li>
+            <p>Go to: <a href="{% url 'recipes:ingredient_list' %}">Ingredients List</a></p>
+        </li>
+    </ul>
+{% endblock %}
