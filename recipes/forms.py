@@ -1,6 +1,7 @@
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django import forms
+from django_select2.forms import Select2MultipleWidget, Select2Widget
 
 from .models import Category, Ingredient, Recipe
 
@@ -33,6 +34,10 @@ class RecipeForm(forms.ModelForm):
     class Meta:
         model = Recipe
         fields = ['name', 'content', 'category', 'ingredients']
+        widgets = {
+            'category': Select2Widget,
+            'ingredients': Select2MultipleWidget,
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
