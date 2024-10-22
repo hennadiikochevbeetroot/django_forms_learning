@@ -1,0 +1,18 @@
+{% extends 'recipes/base.html' %}
+{% block content %}
+    <h1>Categories List</h1>
+    <a href="#">Create New Category</a> ||||||||
+    <a href="{% url 'recipes:main_menu' %}">Back to Main Menu</a>
+    {% if categories %}
+        {% for category in categories %}
+        	<div class="category_div">
+                <p>Name: {{ category.name }}</p>
+                <p>Description: {{ category.description }}</p>
+                <a href="#">Update</a>
+                <a href="#">Delete</a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No Categories yet.</p>
+    {% endif %}
+{% endblock %}
