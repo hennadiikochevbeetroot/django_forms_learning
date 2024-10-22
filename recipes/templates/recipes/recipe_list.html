@@ -1,0 +1,23 @@
+{% extends 'recipes/base.html' %}
+{% block content %}
+    <h2>Recipe List</h2>
+    <a href="{% url 'recipes:recipe_create' %}">Create New Recipe</a> ||||||||
+    <a href="{% url 'recipes:main_menu' %}">Go back to Main Menu</a>
+    {% if recipes %}
+        {% for recipe in recipes %}
+        	<div style="border: 2px solid coral; margin: 8px">
+                <p>Name: {{ recipe.name }}</p>
+                <p>Category: {{ recipe.category }}</p>
+                <p>Content: {{ recipe.content }}</p>
+                <p>Ingredients:</p>
+                <ul>
+                {% for ingredient in recipe.ingredients.all %}
+                	<li>{{ ingredient.name }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No Recipes yet.</p>
+    {% endif %}
+{% endblock %}
