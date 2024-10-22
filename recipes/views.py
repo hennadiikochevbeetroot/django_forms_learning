@@ -1,8 +1,8 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import CategoryForm, IngredientForm
-from .models import Category, Ingredient
+from .forms import CategoryForm, IngredientForm, RecipeForm
+from .models import Category, Ingredient, Recipe
 
 
 ######################### MAIN MENU
@@ -92,3 +92,41 @@ def ingredient_delete(request: HttpRequest, pk: int) -> HttpResponse:
         ingredient.delete()
         return redirect('recipes:ingredient_list')
     return render(request, 'recipes/ingredient_confirm_delete.html', {'ingredient': ingredient})
+
+
+############################### RECIPES
+
+def recipe_create(request: HttpRequest) -> HttpResponse:
+    if request.method == 'POST':
+        form = RecipeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('recipes:recipe_list')
+    else:
+        form = RecipeForm()
+    return render(request, 'recipes/recipe_form.html', {'form': form})
+
+
+def recipe_list(request: HttpRequest) -> HttpResponse:
+    recipes = Recipe.objects.all()
+    return render(request, 'recipes/recipe_list.html', {'recipes': recipes})
+
+
+def recipe_update(request: HttpRequest, pk: int) -> HttpResponse:
+    recipe = get_object_or_404(Recipe, pk=pk)
+    if request.method == 'POST':
+        form = RecipeForm(request.POST, instance=recipe)
+        if form.is_valid():
+            form.save()
+            return redirect('recipes:recipe_list')
+    else:
+        form = RecipeForm(instance=recipe)
+    return render(request, 'recipes/recipe_form.html', {'form': form})
+
+
+def recipe_delete(request: HttpRequest, pk: int) -> HttpResponse:
+    recipe = get_object_or_404(Recipe, pk=pk)
+    if request.method == 'POST':
+        recipe.delete()
+        return redirect('recipes:recipe_list')
+    return render(request, 'recipes/recipe_confirm_delete.html', {'recipe': recipe})
