@@ -8,7 +8,7 @@
         	<div class="category_div">
                 <p>Name: {{ category.name }}</p>
                 <p>Description: {{ category.description }}</p>
-                <a href="#">Update</a>
+                <a href="{% url 'recipes:category_edit' category.pk %}">Update</a>
                 <a href="#">Delete</a>
             </div>
         {% endfor %}
