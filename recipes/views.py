@@ -1,7 +1,8 @@
-from django.shortcuts import render
-from django.http import HttpRequest, HttpResponse
+from django.shortcuts import render, redirect
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest
 
 from .models import Category
+from .forms import CategoryForm
 
 
 # Create your views here.
@@ -15,3 +16,26 @@ def main_menu(request: HttpRequest) -> HttpResponse:
 def category_list(request: HttpRequest) -> HttpResponse:
     categories = Category.objects.all()
     return render(request, 'recipes/category_list.html', {'categories': categories})
+
+
+
+
+def category_create(request: HttpRequest) -> HttpResponse:
+    if request.method == 'POST':
+        # Submit button pressed
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('recipes:category_list')
+        else:
+            return HttpResponseBadRequest('Form is incorrectly filled')
+    else:
+        # Empty form to fill
+        form = CategoryForm()
+
+    return render(request, 'recipes/category_form.html', {'form': form})
+
+
+
+
+
