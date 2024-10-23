@@ -1,11 +1,14 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth.decorators import login_required
 
 from .forms import CategoryForm, IngredientForm, RecipeForm
 from .models import Category, Ingredient, Recipe
 
 
 ######################### MAIN MENU
+
+@login_required
 def main_menu(request: HttpRequest) -> HttpResponse:
     return render(request, 'recipes/main_menu.html')
 

@@ -41,7 +41,11 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',
     'django_select2',
     'recipes.apps.RecipesConfig',
+    'accounts.apps.AccountsConfig',
 ]
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
