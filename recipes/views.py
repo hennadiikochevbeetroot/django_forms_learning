@@ -8,7 +8,6 @@ from .models import Category, Ingredient, Recipe
 
 ######################### MAIN MENU
 
-@login_required
 def main_menu(request: HttpRequest) -> HttpResponse:
     return render(request, 'recipes/main_menu.html')
 

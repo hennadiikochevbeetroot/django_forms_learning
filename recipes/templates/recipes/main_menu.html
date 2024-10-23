@@ -1,15 +1,32 @@
 {% extends 'recipes/base.html' %}
 {% block content %}
-    <h2>Main Menu of Cooking App</h2>
-    <ul>
-        <li>
-            <p>Go to: <a href="{% url 'recipes:category_list' %}">Categories List</a></p>
-        </li>
-        <li>
-            <p>Go to: <a href="{% url 'recipes:ingredient_list' %}">Ingredients List</a></p>
-        </li>
-        <li>
-            <p>Go to: <a href="{% url 'recipes:recipe_list' %}">Recipes List</a></p>
-        </li>
-    </ul>
+    <header>
+        {% if user.is_authenticated %}
+            <p>Welcome, {{ user.username }}!</p>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Log out</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}">Log in</a> ||||||||
+            <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+    </header>
+
+    <main>
+        <h2>Main Menu of Cooking App</h2>
+        {% if user.is_authenticated %}
+            <ul>
+                <li>
+                    <p>Go to: <a href="{% url 'recipes:category_list' %}">Categories List</a></p>
+                </li>
+                <li>
+                    <p>Go to: <a href="{% url 'recipes:ingredient_list' %}">Ingredients List</a></p>
+                </li>
+                <li>
+                    <p>Go to: <a href="{% url 'recipes:recipe_list' %}">Recipes List</a></p>
+                </li>
+            </ul>
+        {% endif %}
+    </main>
 {% endblock %}
