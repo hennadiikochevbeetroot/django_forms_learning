@@ -15,6 +15,7 @@ def main_menu(request: HttpRequest) -> HttpResponse:
 ######################### CATEGORIES
 
 # CREATE
+@login_required
 def category_create(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         form = CategoryForm(request.POST)
@@ -27,12 +28,14 @@ def category_create(request: HttpRequest) -> HttpResponse:
 
 
 # READ - list
+@login_required
 def category_list(request: HttpRequest) -> HttpResponse:
     categories = Category.objects.all()
     return render(request, 'recipes/category_list.html', {'categories': categories})
 
 
 # UPDATE
+@login_required
 def category_update(request: HttpRequest, pk: int) -> HttpResponse:
     category = get_object_or_404(Category, pk=pk)
     if request.method == 'POST':
@@ -46,6 +49,7 @@ def category_update(request: HttpRequest, pk: int) -> HttpResponse:
 
 
 # DELETE
+@login_required
 def category_delete(request: HttpRequest, pk: int) -> HttpResponse:
     category = get_object_or_404(Category, pk=pk)
     if request.method == 'POST':
@@ -58,6 +62,7 @@ def category_delete(request: HttpRequest, pk: int) -> HttpResponse:
 
 
 # CREATE
+@login_required
 def ingredient_create(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         form = IngredientForm(request.POST)
@@ -70,12 +75,14 @@ def ingredient_create(request: HttpRequest) -> HttpResponse:
 
 
 # READ - list
+@login_required
 def ingredient_list(request: HttpRequest) -> HttpResponse:
     ingredients = Ingredient.objects.all()
     return render(request, 'recipes/ingredient_list.html', {'ingredients': ingredients})
 
 
 # UPDATE
+@login_required
 def ingredient_update(request: HttpRequest, pk: int) -> HttpResponse:
     ingredient = get_object_or_404(Ingredient, pk=pk)
     if request.method == 'POST':
@@ -88,6 +95,7 @@ def ingredient_update(request: HttpRequest, pk: int) -> HttpResponse:
     return render(request, 'recipes/ingredient_form.html', {'form': form})
 
 
+@login_required
 def ingredient_delete(request: HttpRequest, pk: int) -> HttpResponse:
     ingredient = get_object_or_404(Ingredient, pk=pk)
     if request.method == 'POST':
@@ -98,6 +106,7 @@ def ingredient_delete(request: HttpRequest, pk: int) -> HttpResponse:
 
 ############################### RECIPES
 
+@login_required
 def recipe_create(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         form = RecipeForm(request.POST)
@@ -109,11 +118,13 @@ def recipe_create(request: HttpRequest) -> HttpResponse:
     return render(request, 'recipes/recipe_form.html', {'form': form})
 
 
+@login_required
 def recipe_list(request: HttpRequest) -> HttpResponse:
     recipes = Recipe.objects.all()
     return render(request, 'recipes/recipe_list.html', {'recipes': recipes})
 
 
+@login_required
 def recipe_update(request: HttpRequest, pk: int) -> HttpResponse:
     recipe = get_object_or_404(Recipe, pk=pk)
     if request.method == 'POST':
@@ -126,6 +137,7 @@ def recipe_update(request: HttpRequest, pk: int) -> HttpResponse:
     return render(request, 'recipes/recipe_form.html', {'form': form})
 
 
+@login_required
 def recipe_delete(request: HttpRequest, pk: int) -> HttpResponse:
     recipe = get_object_or_404(Recipe, pk=pk)
     if request.method == 'POST':
