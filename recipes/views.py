@@ -20,7 +20,9 @@ def category_create(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         form = CategoryForm(request.POST)
         if form.is_valid():
-            form.save()
+            category = form.save()
+            category.user = request.user
+            category.save()
             return redirect('recipes:category_list')
     else:
         form = CategoryForm()
@@ -30,14 +32,14 @@ def category_create(request: HttpRequest) -> HttpResponse:
 # READ - list
 @login_required
 def category_list(request: HttpRequest) -> HttpResponse:
-    categories = Category.objects.all()
+    categories = Category.objects.filter(user=request.user)
     return render(request, 'recipes/category_list.html', {'categories': categories})
 
 
 # UPDATE
 @login_required
 def category_update(request: HttpRequest, pk: int) -> HttpResponse:
-    category = get_object_or_404(Category, pk=pk)
+    category = get_object_or_404(Category, pk=pk, user=request.user)
     if request.method == 'POST':
         form = CategoryForm(request.POST, instance=category)
         if form.is_valid():
@@ -51,7 +53,7 @@ def category_update(request: HttpRequest, pk: int) -> HttpResponse:
 # DELETE
 @login_required
 def category_delete(request: HttpRequest, pk: int) -> HttpResponse:
-    category = get_object_or_404(Category, pk=pk)
+    category = get_object_or_404(Category, pk=pk, user=request.user)
     if request.method == 'POST':
         category.delete()
         return redirect('recipes:category_list')
