@@ -20,7 +20,7 @@ def category_create(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         form = CategoryForm(request.POST)
         if form.is_valid():
-            category = form.save()
+            category = form.save(commit=False)
             category.user = request.user
             category.save()
             return redirect('recipes:category_list')
@@ -69,7 +69,9 @@ def ingredient_create(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         form = IngredientForm(request.POST)
         if form.is_valid():
-            form.save()
+            ingredient = form.save(commit=False)
+            ingredient.user = request.user
+            ingredient.save()
             return redirect('recipes:ingredient_list')
     else:
         form = IngredientForm()
@@ -79,14 +81,14 @@ def ingredient_create(request: HttpRequest) -> HttpResponse:
 # READ - list
 @login_required
 def ingredient_list(request: HttpRequest) -> HttpResponse:
-    ingredients = Ingredient.objects.all()
+    ingredients = Ingredient.objects.filter(user=request.user)
     return render(request, 'recipes/ingredient_list.html', {'ingredients': ingredients})
 
 
 # UPDATE
 @login_required
 def ingredient_update(request: HttpRequest, pk: int) -> HttpResponse:
-    ingredient = get_object_or_404(Ingredient, pk=pk)
+    ingredient = get_object_or_404(Ingredient, pk=pk, user=request.user)
     if request.method == 'POST':
         form = IngredientForm(request.POST, instance=ingredient)
         if form.is_valid():
@@ -99,7 +101,7 @@ def ingredient_update(request: HttpRequest, pk: int) -> HttpResponse:
 
 @login_required
 def ingredient_delete(request: HttpRequest, pk: int) -> HttpResponse:
-    ingredient = get_object_or_404(Ingredient, pk=pk)
+    ingredient = get_object_or_404(Ingredient, pk=pk, user=request.user)
     if request.method == 'POST':
         ingredient.delete()
         return redirect('recipes:ingredient_list')
@@ -113,7 +115,9 @@ def recipe_create(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         form = RecipeForm(request.POST)
         if form.is_valid():
-            form.save()
+            recipe = form.save(commit=False)
+            recipe.user = request.user
+            recipe.save()
             return redirect('recipes:recipe_list')
     else:
         form = RecipeForm()
@@ -122,13 +126,13 @@ def recipe_create(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def recipe_list(request: HttpRequest) -> HttpResponse:
-    recipes = Recipe.objects.all()
+    recipes = Recipe.objects.filter(user=request.user)
     return render(request, 'recipes/recipe_list.html', {'recipes': recipes})
 
 
 @login_required
 def recipe_update(request: HttpRequest, pk: int) -> HttpResponse:
-    recipe = get_object_or_404(Recipe, pk=pk)
+    recipe = get_object_or_404(Recipe, pk=pk, user=request.user)
     if request.method == 'POST':
         form = RecipeForm(request.POST, instance=recipe)
         if form.is_valid():
@@ -141,7 +145,7 @@ def recipe_update(request: HttpRequest, pk: int) -> HttpResponse:
 
 @login_required
 def recipe_delete(request: HttpRequest, pk: int) -> HttpResponse:
-    recipe = get_object_or_404(Recipe, pk=pk)
+    recipe = get_object_or_404(Recipe, pk=pk, user=request.user)
     if request.method == 'POST':
         recipe.delete()
         return redirect('recipes:recipe_list')
