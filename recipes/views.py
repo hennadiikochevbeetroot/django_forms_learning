@@ -19,7 +19,9 @@ def category_create(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         form = CategoryForm(request.POST)
         if form.is_valid():
-            form.save()
+            category = form.save(commit=False)
+            category.user = request.user
+            category.save()
             return redirect('recipes:category_list')
     else:
         form = CategoryForm()
@@ -29,14 +31,14 @@ def category_create(request: HttpRequest) -> HttpResponse:
 # READ - list
 @login_required
 def category_list(request: HttpRequest) -> HttpResponse:
-    categories = Category.objects.all()
+    categories = Category.objects.filter(user=request.user)
     return render(request, 'recipes/category_list.html', {'categories': categories})
 
 
 # UPDATE
 @login_required
 def category_update(request: HttpRequest, pk: int) -> HttpResponse:
-    category = get_object_or_404(Category, pk=pk)
+    category = get_object_or_404(Category, pk=pk, user=request.user)
     if request.method == 'POST':
         form = CategoryForm(request.POST, instance=category)
         if form.is_valid():
@@ -50,7 +52,7 @@ def category_update(request: HttpRequest, pk: int) -> HttpResponse:
 # DELETE
 @login_required
 def category_delete(request: HttpRequest, pk: int) -> HttpResponse:
-    category = get_object_or_404(Category, pk=pk)
+    category = get_object_or_404(Category, pk=pk, user=request.user)
     if request.method == 'POST':
         category.delete()
         return redirect('recipes:category_list')
@@ -66,7 +68,9 @@ def ingredient_create(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         form = IngredientForm(request.POST)
         if form.is_valid():
-            form.save()
+            ingredient = form.save(commit=False)
+            ingredient.user = request.user
+            ingredient.save()
             return redirect('recipes:ingredient_list')
     else:
         form = IngredientForm()
@@ -76,14 +80,25 @@ def ingredient_create(request: HttpRequest) -> HttpResponse:
 # READ - list
 @login_required
 def ingredient_list(request: HttpRequest) -> HttpResponse:
-    ingredients = Ingredient.objects.all()
+    user_groups_ids = request.user.groups.values('id')
+    ingredients = Ingredient.objects.filter(user__groups__in=user_groups_ids)
+    # select * from ingredient
+    # join user on ingredient.user_id = user.id
+    # join user_groups on user.id = user_groups.user_id
+    # join group on user_groups.group_id = group.id
+    # where group.id in (
+    #    select id from group
+    #    join user_groups on group.id = user_groups.group_id
+    #    join user on user_groups.user_id = user.id
+    #    where user.id = {request.user.id}
+    # )
     return render(request, 'recipes/ingredient_list.html', {'ingredients': ingredients})
 
 
 # UPDATE
 @login_required
 def ingredient_update(request: HttpRequest, pk: int) -> HttpResponse:
-    ingredient = get_object_or_404(Ingredient, pk=pk)
+    ingredient = get_object_or_404(Ingredient, pk=pk, user=request.user)
     if request.method == 'POST':
         form = IngredientForm(request.POST, instance=ingredient)
         if form.is_valid():
@@ -96,7 +111,7 @@ def ingredient_update(request: HttpRequest, pk: int) -> HttpResponse:
 
 @login_required
 def ingredient_delete(request: HttpRequest, pk: int) -> HttpResponse:
-    ingredient = get_object_or_404(Ingredient, pk=pk)
+    ingredient = get_object_or_404(Ingredient, pk=pk, user=request.user)
     if request.method == 'POST':
         ingredient.delete()
         return redirect('recipes:ingredient_list')
