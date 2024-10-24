@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', lambda request: redirect(reverse('recipes:main_menu'))),
     path('cooking/', include('recipes.urls')),
+    path('accounts/', include('accounts.urls')),
 ]
