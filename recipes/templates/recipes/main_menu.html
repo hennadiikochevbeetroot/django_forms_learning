@@ -10,9 +10,9 @@
         <div class="logo">Cooking App</div>
         {% if user.is_authenticated %}
             <div class="burger" onclick="toggleMenu()">
-              <div></div>
-              <div></div>
-              <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
             </div>
             <nav class="menu">
                 <a href="#">Home</a>
@@ -21,15 +21,15 @@
                 <a href="{% url 'recipes:recipe_list' %}">Recipes</a>
             </nav>
             <div class="user-menu" onclick="toggleDropdown()">
-              <span class="user-name">Welcome, {{ user.username }}</span>
-              <div class="dropdown">
-                <a href="#profile">Profile</a>
-                <a href="#settings">Settings</a>
-                <form method="POST" action="{% url 'accounts:logout' %}">
-                  {% csrf_token %}
-                  <button type="submit">Log Out</button>
-                </form>
-              </div>
+                <span class="user-name">Welcome, {{ user.username }}</span>
+                <div class="dropdown">
+                    <a href="#profile">Profile</a>
+                    <a href="#settings">Settings</a>
+                    <form method="POST" action="{% url 'accounts:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit">Log Out</button>
+                    </form>
+                </div>
             </div>
         {% else %}
             <div class="user-menu" onclick="toggleDropdown()">
@@ -44,20 +44,21 @@
 
     <script>
         function toggleMenu() {
-          document.querySelector('.menu').classList.toggle('active');
+            document.querySelector('.menu').classList.toggle('active');
         }
+
         function toggleDropdown() {
-          document.querySelector('.dropdown').classList.toggle('active');
+            document.querySelector('.dropdown').classList.toggle('active');
         }
 
         // Close dropdown if clicked outside
         document.addEventListener('click', function (event) {
-          const dropdown = document.querySelector('.dropdown');
-          const userMenu = document.querySelector('.user-menu');
-          if (!userMenu.contains(event.target)) {
-            dropdown.classList.remove('active');
-          }
+            const dropdown = document.querySelector('.dropdown');
+            const userMenu = document.querySelector('.user-menu');
+            if (!userMenu.contains(event.target)) {
+                dropdown.classList.remove('active');
+            }
         });
-      </script>
+    </script>
 
 {% endblock %}
