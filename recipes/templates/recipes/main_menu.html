@@ -1,27 +1,63 @@
 {% extends 'recipes/base.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'recipes/main_menu.css' %}">
+{% endblock %}
+
 {% block content %}
-    {% if user.is_authenticated %}
-        <p>Hello, user `{{ user.username }}`</p>
-        <form method="POST" action="{% url 'accounts:logout' %}">
-            {% csrf_token %}
-            <button type="submit">Log Out</button>
-        </form>
-    {% else %}
-        <a href="{% url 'accounts:login' %}">Log In</a> ||||||||
-        <a href="{% url 'accounts:register' %}">Register</a>
-    {% endif %}
-    <h2>Main Menu of Cooking App</h2>
-    {% if user.is_authenticated %}
-        <ul>
-            <li>
-                <p>Go to: <a href="{% url 'recipes:category_list' %}">Categories List</a></p>
-            </li>
-            <li>
-                <p>Go to: <a href="{% url 'recipes:ingredient_list' %}">Ingredients List</a></p>
-            </li>
-            <li>
-                <p>Go to: <a href="{% url 'recipes:recipe_list' %}">Recipes List</a></p>
-            </li>
-        </ul>
-    {% endif %}
+    <header class="header">
+        <div class="logo">Cooking App</div>
+        {% if user.is_authenticated %}
+            <div class="burger" onclick="toggleMenu()">
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+            <nav class="menu">
+                <a href="#">Home</a>
+                <a href="{% url 'recipes:category_list' %}">Categories</a>
+                <a href="{% url 'recipes:ingredient_list' %}">Ingredients</a>
+                <a href="{% url 'recipes:recipe_list' %}">Recipes</a>
+            </nav>
+            <div class="user-menu" onclick="toggleDropdown()">
+              <span class="user-name">Welcome, {{ user.username }}</span>
+              <div class="dropdown">
+                <a href="#profile">Profile</a>
+                <a href="#settings">Settings</a>
+                <form method="POST" action="{% url 'accounts:logout' %}">
+                  {% csrf_token %}
+                  <button type="submit">Log Out</button>
+                </form>
+              </div>
+            </div>
+        {% else %}
+            <div class="user-menu" onclick="toggleDropdown()">
+                <span class="user-name">Login Options</span>
+                <div class="dropdown">
+                    <a href="{% url 'accounts:login' %}">Sign In</a>
+                    <a href="{% url 'accounts:register' %}">Register</a>
+                </div>
+            </div>
+        {% endif %}
+    </header>
+
+    <script>
+        function toggleMenu() {
+          document.querySelector('.menu').classList.toggle('active');
+        }
+        function toggleDropdown() {
+          document.querySelector('.dropdown').classList.toggle('active');
+        }
+
+        // Close dropdown if clicked outside
+        document.addEventListener('click', function (event) {
+          const dropdown = document.querySelector('.dropdown');
+          const userMenu = document.querySelector('.user-menu');
+          if (!userMenu.contains(event.target)) {
+            dropdown.classList.remove('active');
+          }
+        });
+      </script>
+
 {% endblock %}
