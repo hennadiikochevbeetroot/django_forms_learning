@@ -1,9 +1,22 @@
 {% extends 'recipes/base.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'accounts/register.css' %}">
+{% endblock %}
+
 {% block content %}
-    <h2>Registration Page</h2>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Register</button>
-    </form>
+    <div class="container">
+        <h2>Create an Account</h2>
+
+        <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="submit-btn">Sign Up</button>
+        </form>
+
+        <div class="login-link">
+          Already have an account? <a href="{% url 'accounts:login' %}">Log in</a>
+        </div>
+      </div>
 {% endblock %}
