@@ -1,18 +1,33 @@
 {% extends 'recipes/base.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'recipes/category_list.css' %}">
+{% endblock %}
+
 {% block content %}
-    <h2>Categories List</h2>
-    <a href="{% url 'recipes:category_create' %}">Create New Category</a> ||||||||
-    <a href="{% url 'recipes:main_menu' %}">Go back to Main Menu</a>
-    {% if categories %}
-        {% for category in categories %}
-            <div style="border: 2px solid gray; margin: 5px">
-                <p>Name: {{ category.name }}</p>
-                <p>Description: {{ category.description }}</p>
-                <a href="{% url 'recipes:category_update' category.pk %}">Update</a>
-                <a href="{% url 'recipes:category_delete' category.pk %}">Delete</a>
-            </div>
-        {% endfor %}
-    {% else %}
-        <p>No Categories yet.</p>
-    {% endif %}
+    <div class="container">
+        <h2>Categories List</h2>
+
+        <div class="nav-links">
+            <a href="{% url 'recipes:category_create' %}">Create New Category</a>
+            <a href="{% url 'recipes:main_menu' %}">Go back to Main Menu</a>
+        </div>
+
+        {% if categories %}
+            {% for category in categories %}
+                <div class="category-card">
+                    <h3>{{ category.name }}</h3>
+                    <p>{{ category.description }}</p>
+                    <div class="category-actions">
+                        <a href="{% url 'recipes:category_update' category.pk %}" class="update-link">Update</a>
+                        <a href="{% url 'recipes:category_delete' category.pk %}" class="delete-link">Delete</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-categories">No Categories yet.</p>
+        {% endif %}
+
+    </div>
 {% endblock %}
